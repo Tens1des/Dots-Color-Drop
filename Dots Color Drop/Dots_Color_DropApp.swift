@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct Dots_Color_DropApp: App {
+    @StateObject private var settingsManager = SettingsManager()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if settingsManager.settings.hasSeenOnboarding {
+                MainTabView()
+                    .environmentObject(settingsManager)
+            } else {
+                OnboardingView()
+                    .environmentObject(settingsManager)
+            }
         }
     }
 }
