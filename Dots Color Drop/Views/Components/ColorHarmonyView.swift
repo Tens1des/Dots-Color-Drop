@@ -114,3 +114,5 @@ struct ColorHarmonyView: View {
     .environmentObject(SettingsManager())
 }
 
+
+

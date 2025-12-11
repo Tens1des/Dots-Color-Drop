@@ -13,13 +13,16 @@ struct Dots_Color_DropApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if settingsManager.settings.hasSeenOnboarding {
-                MainTabView()
-                    .environmentObject(settingsManager)
-            } else {
-                OnboardingView()
-                    .environmentObject(settingsManager)
+            Group {
+                if settingsManager.settings.hasSeenOnboarding {
+                    MainTabView()
+                        .environmentObject(settingsManager)
+                } else {
+                    OnboardingView()
+                        .environmentObject(settingsManager)
+                }
             }
+            .id(settingsManager.settings.hasSeenOnboarding)
         }
     }
 }

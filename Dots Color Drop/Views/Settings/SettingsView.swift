@@ -16,6 +16,7 @@ struct SettingsView: View {
     @State private var showColorPicker = false
     @State private var selectedColor: Color = .blue
     @State private var containerCount: Int = 6
+    @State private var showOnboarding = false
     
     var body: some View {
         ZStack {
@@ -87,10 +88,14 @@ struct SettingsView: View {
                                     }
                                 )) {
                                     ForEach(AppLanguage.allCases, id: \.self) { language in
-                                        Text(language.displayName).tag(language)
+                                        Text(language.displayName)
+                                            .tag(language)
                                     }
                                 }
                                 .pickerStyle(.segmented)
+                                .tint(Color(hex: "#6C5CE7"))
+                                .background(Color.white.opacity(0.15))
+                                .cornerRadius(8)
                             }
                             .padding(16)
                         }
@@ -110,10 +115,62 @@ struct SettingsView: View {
                                     }
                                 )) {
                                     ForEach(TextSize.allCases, id: \.self) { size in
-                                        Text(size.localizedName).tag(size)
+                                        Text(size.localizedName)
+                                            .tag(size)
                                     }
                                 }
                                 .pickerStyle(.segmented)
+                                .tint(Color(hex: "#6C5CE7"))
+                                .background(Color.white.opacity(0.15))
+                                .cornerRadius(8)
+                            }
+                            .padding(16)
+                        }
+                        
+                        // Physics toggle
+                        SettingsCard {
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack {
+                                    Text(NSLocalizedString("physics_animation", comment: ""))
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                    Spacer()
+                                    Toggle("", isOn: Binding(
+                                        get: { settingsManager.settings.physicsEnabled },
+                                        set: {
+                                            settingsManager.settings.physicsEnabled = $0
+                                            settingsManager.saveSettings()
+                                        }
+                                    ))
+                                    .tint(Color(hex: "#6C5CE7"))
+                                }
+                            }
+                            .padding(16)
+                        }
+                        
+                        // Gravity Style section
+                        SettingsCard {
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Gravity Style")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                
+                                Picker("", selection: Binding(
+                                    get: { settingsManager.settings.gravityStyle },
+                                    set: {
+                                        settingsManager.settings.gravityStyle = $0
+                                        settingsManager.saveSettings()
+                                    }
+                                )) {
+                                    ForEach(GravityStyle.allCases, id: \.self) { style in
+                                        Text(style.localizedName)
+                                            .tag(style)
+                                    }
+                                }
+                                .pickerStyle(.segmented)
+                                .tint(Color(hex: "#6C5CE7"))
+                                .background(Color.white.opacity(0.15))
+                                .cornerRadius(8)
                             }
                             .padding(16)
                         }
@@ -185,6 +242,30 @@ struct SettingsView: View {
                         }
                         .padding(.horizontal, 20)
                         
+                        // Show Onboarding button
+                        Button(action: {
+                            showOnboarding = true
+                        }) {
+                            HStack(spacing: 8) {
+                                Image(systemName: "book.fill")
+                                    .font(.system(size: 16))
+                                Text("Show Onboarding")
+                                    .font(.headline)
+                            }
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(
+                                LinearGradient(
+                                    colors: [Color(hex: "#6C5CE7"), Color(hex: "#8B7AE8")],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .cornerRadius(12)
+                        }
+                        .padding(.horizontal, 20)
+                        
                         // Clear Data button
                         Button(action: {
                             clearData()
@@ -214,6 +295,10 @@ struct SettingsView: View {
                 customColors.append(AppColor(hex: uiColor.hexString))
                 saveCustomColors()
             }
+        }
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingView()
+                .environmentObject(settingsManager)
         }
         .onAppear {
             loadCustomColors()

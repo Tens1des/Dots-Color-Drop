@@ -74,6 +74,20 @@ enum GravityStyle: String, Codable, CaseIterable {
     }
 }
 
+enum ShuffleMode: String, CaseIterable {
+    case random = "Random"
+    case lightToDark = "Light → Dark"
+    case darkToLight = "Dark → Light"
+    
+    var localizedName: String {
+        switch self {
+        case .random: return NSLocalizedString("random", comment: "")
+        case .lightToDark: return "Light → Dark"
+        case .darkToLight: return "Dark → Light"
+        }
+    }
+}
+
 enum HarmonyMode: String, Codable, CaseIterable {
     case complementary = "Complementary"
     case analogous = "Analogous"
@@ -142,6 +156,22 @@ struct Ball: Identifiable {
     }
 }
 
+struct MixSpark: Identifiable {
+    let id: UUID
+    let mixedColor: AppColor
+    var position: CGPoint
+    var opacity: Double
+    var age: TimeInterval
+    
+    init(id: UUID = UUID(), mixedColor: AppColor, position: CGPoint, opacity: Double = 1.0, age: TimeInterval = 0.0) {
+        self.id = id
+        self.mixedColor = mixedColor
+        self.position = position
+        self.opacity = opacity
+        self.age = age
+    }
+}
+
 extension UIColor {
     convenience init?(hex: String) {
         var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -170,5 +200,11 @@ extension UIColor {
         
         return String(format: "#%06x", rgb).uppercased()
     }
+    
+    func toHex() -> String {
+        return hexString
+    }
 }
+
+
 

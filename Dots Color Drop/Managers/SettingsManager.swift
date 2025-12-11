@@ -29,6 +29,8 @@ class SettingsManager: ObservableObject {
             UserDefaults.standard.set(encoded, forKey: settingsKey)
         }
         setupLanguage()
+        // Trigger UI update
+        objectWillChange.send()
     }
     
     private func setupLanguage() {
@@ -41,4 +43,5 @@ class SettingsManager: ObservableObject {
         saveSettings()
     }
 }
+
 

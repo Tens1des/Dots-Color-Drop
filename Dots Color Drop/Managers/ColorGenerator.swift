@@ -106,6 +106,39 @@ class ColorGenerator {
             return AppColor(hex: newColor.hexString)
         }
     }
+    
+    func mixColors(_ colors: [AppColor]) -> AppColor? {
+        guard !colors.isEmpty else { return nil }
+        
+        if colors.count == 1 {
+            return colors.first
+        }
+        
+        // Mix all colors by averaging RGB values
+        var totalR: CGFloat = 0
+        var totalG: CGFloat = 0
+        var totalB: CGFloat = 0
+        
+        for color in colors {
+            var r: CGFloat = 0
+            var g: CGFloat = 0
+            var b: CGFloat = 0
+            var a: CGFloat = 0
+            
+            color.uiColor.getRed(&r, green: &g, blue: &b, alpha: &a)
+            totalR += r
+            totalG += g
+            totalB += b
+        }
+        
+        let count = CGFloat(colors.count)
+        let mixedR = totalR / count
+        let mixedG = totalG / count
+        let mixedB = totalB / count
+        
+        let mixedUIColor = UIColor(red: mixedR, green: mixedG, blue: mixedB, alpha: 1.0)
+        return AppColor(hex: mixedUIColor.hexString)
+    }
 }
 
 extension UIColor {
@@ -120,4 +153,6 @@ extension UIColor {
         return (r * 0.299 + g * 0.587 + b * 0.114)
     }
 }
+
+
 

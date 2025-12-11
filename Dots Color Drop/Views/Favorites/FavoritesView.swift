@@ -230,3 +230,5 @@ struct FavoriteColorCardView: View {
         .environmentObject(SettingsManager())
 }
 
+
+

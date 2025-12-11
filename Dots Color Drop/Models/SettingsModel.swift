@@ -16,9 +16,10 @@ class AppSettings: ObservableObject, Codable {
     @Published var userName: String = ""
     @Published var selectedAvatar: String = ""
     @Published var hasSeenOnboarding: Bool = false
+    @Published var physicsEnabled: Bool = true
     
     enum CodingKeys: String, CodingKey {
-        case language, textSize, containerCount, gravityStyle, userName, selectedAvatar, hasSeenOnboarding
+        case language, textSize, containerCount, gravityStyle, userName, selectedAvatar, hasSeenOnboarding, physicsEnabled
     }
     
     init() {}
@@ -32,6 +33,7 @@ class AppSettings: ObservableObject, Codable {
         userName = try container.decode(String.self, forKey: .userName)
         selectedAvatar = try container.decode(String.self, forKey: .selectedAvatar)
         hasSeenOnboarding = try container.decode(Bool.self, forKey: .hasSeenOnboarding)
+        physicsEnabled = (try? container.decode(Bool.self, forKey: .physicsEnabled)) ?? true
     }
     
     func encode(to encoder: Encoder) throws {
@@ -43,6 +45,7 @@ class AppSettings: ObservableObject, Codable {
         try container.encode(userName, forKey: .userName)
         try container.encode(selectedAvatar, forKey: .selectedAvatar)
         try container.encode(hasSeenOnboarding, forKey: .hasSeenOnboarding)
+        try container.encode(physicsEnabled, forKey: .physicsEnabled)
     }
 }
 
