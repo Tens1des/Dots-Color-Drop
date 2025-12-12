@@ -89,7 +89,7 @@ struct FavoritesView: View {
                                 .font(.system(size: 60))
                                 .foregroundColor(.white.opacity(0.5))
                             
-                            Text("No favorite palettes")
+                            Text(NSLocalizedString("No favorite palettes", comment: ""))
                                 .font(.title2)
                                 .foregroundColor(.white.opacity(0.8))
                         }
@@ -119,7 +119,7 @@ struct FavoritesView: View {
                                 .font(.system(size: 60))
                                 .foregroundColor(.white.opacity(0.5))
                             
-                            Text("No favorite colors")
+                            Text(NSLocalizedString("No favorite colors", comment: ""))
                                 .font(.title2)
                                 .foregroundColor(.white.opacity(0.8))
                         }
@@ -229,6 +229,7 @@ struct FavoriteColorCardView: View {
         .environmentObject(PaletteManager())
         .environmentObject(SettingsManager())
 }
+
 
 
 

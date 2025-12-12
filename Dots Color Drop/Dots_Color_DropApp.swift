@@ -23,6 +23,7 @@ struct Dots_Color_DropApp: App {
                 }
             }
             .id(settingsManager.settings.hasSeenOnboarding)
+            .preferredColorScheme(.light)
         }
     }
 }

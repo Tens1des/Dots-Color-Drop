@@ -12,23 +12,25 @@ struct OnboardingView: View {
     @Environment(\.dismiss) var dismiss
     @State private var currentPage = 0
     
-    let pages = [
-        OnboardingPage(
-            icon: "paintpalette.fill",
-            title: "Create Palettes Through Play",
-            description: "Plinko Color Sorter works fully offline and lets you create color palettes through a simple action - you drop color balls, and they form unique combinations. No registration, no extra steps - it's a fast and creative tool that turns color matching into a light game with chaos and order."
-        ),
-        OnboardingPage(
-            icon: "sparkles",
-            title: "Drop, Catch, Shape Your Colors",
-            description: "Each drop creates a new visual story. Balls pass through the Plinko board, land in containers, and form a palette. You can lock containers, choose colors manually, adjust gravity, view harmonies, shuffle order, and adjust temperature. Saved palettes are stored in history and favorites."
-        ),
-        OnboardingPage(
-            icon: "square.and.arrow.down.fill",
-            title: "Export & Collect Your Creations",
-            description: "Created palettes can be exported as PNG, HEX list, or stylish card. The app helps you collect your own collection of color ideas, return to them, and refine if desired. Mini animations, soft transitions, and the atmosphere of 'controlled chaos' make the palette creation process pleasant and inspiring."
-        )
-    ]
+    var pages: [OnboardingPage] {
+        [
+            OnboardingPage(
+                icon: "paintpalette.fill",
+                title: NSLocalizedString("onboarding_page1_title", comment: ""),
+                description: NSLocalizedString("onboarding_page1_description", comment: "")
+            ),
+            OnboardingPage(
+                icon: "sparkles",
+                title: NSLocalizedString("onboarding_page2_title", comment: ""),
+                description: NSLocalizedString("onboarding_page2_description", comment: "")
+            ),
+            OnboardingPage(
+                icon: "square.and.arrow.down.fill",
+                title: NSLocalizedString("onboarding_page3_title", comment: ""),
+                description: NSLocalizedString("onboarding_page3_description", comment: "")
+            )
+        ]
+    }
     
     var body: some View {
         ZStack {
@@ -106,7 +108,7 @@ struct OnboardingView: View {
                         }
                     }
                 }) {
-                    Text(currentPage < pages.count - 1 ? "Next" : "Get Started")
+                    Text(currentPage < pages.count - 1 ? NSLocalizedString("Next", comment: "") : NSLocalizedString("Get Started", comment: ""))
                         .font(.headline)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -137,54 +139,59 @@ struct OnboardingPageView: View {
     let page: OnboardingPage
     
     var body: some View {
-        VStack(spacing: 40) {
-            Spacer()
-            
-            // Icon/Illustration with animation
-            ZStack {
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color(hex: "#6C5CE7").opacity(0.2),
-                                Color(hex: "#FD79A8").opacity(0.2)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 160, height: 160)
-                    .blur(radius: 30)
+        ScrollView {
+            VStack(spacing: 30) {
+                Spacer(minLength: 20)
                 
-                Image(systemName: page.icon)
-                    .font(.system(size: 80, weight: .light))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [Color(hex: "#6C5CE7"), Color(hex: "#FD79A8")],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
+                // Icon/Illustration with animation
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color(hex: "#6C5CE7").opacity(0.2),
+                                    Color(hex: "#FD79A8").opacity(0.2)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
                         )
-                    )
+                        .frame(width: 160, height: 160)
+                        .blur(radius: 30)
+                    
+                    Image(systemName: page.icon)
+                        .font(.system(size: 80, weight: .light))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [Color(hex: "#6C5CE7"), Color(hex: "#FD79A8")],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                }
+                .padding(.top, 20)
+                
+                // Title
+                Text(page.title)
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 30)
+                    .lineSpacing(4)
+                    .fixedSize(horizontal: false, vertical: true)
+                
+                // Description
+                Text(page.description)
+                    .font(.system(size: 16))
+                    .foregroundColor(.white.opacity(0.85))
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(8)
+                    .padding(.horizontal, 30)
+                    .fixedSize(horizontal: false, vertical: true)
+                
+                Spacer(minLength: 20)
             }
-            .padding(.top, 40)
-            
-            // Title
-            Text(page.title)
-                .font(.system(size: 32, weight: .bold))
-                .foregroundColor(.white)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 40)
-                .lineSpacing(4)
-            
-            // Description
-            Text(page.description)
-                .font(.system(size: 17))
-                .foregroundColor(.white.opacity(0.85))
-                .multilineTextAlignment(.center)
-                .lineSpacing(6)
-                .padding(.horizontal, 40)
-            
-            Spacer()
+            .frame(maxWidth: .infinity)
         }
     }
 }

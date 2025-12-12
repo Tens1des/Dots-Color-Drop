@@ -94,7 +94,7 @@ struct ColorHarmonyView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(NSLocalizedString("Done", comment: "")) {
                         dismiss()
                     }
                     .foregroundColor(.white)
@@ -113,6 +113,7 @@ struct ColorHarmonyView: View {
     ])
     .environmentObject(SettingsManager())
 }
+
 
 
 

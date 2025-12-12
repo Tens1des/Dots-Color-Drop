@@ -31,31 +31,31 @@ struct ContainerView: View {
             // Container shape with balls inside
             ZStack(alignment: .bottom) {
                 // Container outline
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: 6)
                     .stroke(
                         container.isLocked ? Color(hex: "#6C5CE7") : Color.white.opacity(0.3),
-                        lineWidth: container.isLocked ? 3 : 2
+                        lineWidth: container.isLocked ? 2.5 : 1.5
                     )
-                    .frame(height: 100)
+                    .frame(height: 80)
                 
                 // Colors displayed as balls at the bottom of container
                 if !container.colors.isEmpty {
-                    HStack(spacing: 6) {
-                        ForEach(container.colors.prefix(5)) { color in
+                    HStack(spacing: 4) {
+                        ForEach(container.colors.prefix(4)) { color in
                             Circle()
                                 .fill(color.color)
-                                .frame(width: 32, height: 32)
+                                .frame(width: 24, height: 24)
                                 .overlay(
                                     Circle()
                                         .stroke(Color.white.opacity(0.2), lineWidth: 1)
                                 )
-                                .shadow(color: color.color.opacity(0.4), radius: 3, x: 0, y: 2)
+                                .shadow(color: color.color.opacity(0.4), radius: 2, x: 0, y: 1)
                         }
                     }
-                    .padding(.bottom, 8)
+                    .padding(.bottom, 6)
                 }
             }
-            .frame(height: 100)
+            .frame(height: 80)
         }
     }
 }

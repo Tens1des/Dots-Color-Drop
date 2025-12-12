@@ -89,7 +89,7 @@ struct PaletteDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(NSLocalizedString("Done", comment: "")) {
                         dismiss()
                     }
                     .foregroundColor(.white)
@@ -146,11 +146,11 @@ struct SimilarPalettesView: View {
                     .padding(20)
                 }
             }
-            .navigationTitle("Similar Palettes")
+            .navigationTitle(NSLocalizedString("Similar Palettes", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(NSLocalizedString("Done", comment: "")) {
                         dismiss()
                     }
                     .foregroundColor(.white)

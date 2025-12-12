@@ -61,7 +61,7 @@ struct HomeView: View {
                                     .foregroundColor(.white)
                             }
                             
-                            Text("Plinko")
+                            Text(NSLocalizedString("Plinko", comment: ""))
                                 .font(.system(size: 24, weight: .bold))
                                 .foregroundColor(.white)
                         }
@@ -111,7 +111,7 @@ struct HomeView: View {
                     VStack(spacing: 16) {
                         // Mode selector - improved design
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 10) {
+                            HStack(spacing: 8) {
                                 ForEach(GenerationMode.allCases, id: \.self) { mode in
                                     Button(action: {
                                         withAnimation(.spring(response: 0.3)) {
@@ -191,95 +191,99 @@ struct HomeView: View {
                         }
                         .padding(.horizontal, 20)
                         
-                        // Containers row with colors below
+                        // Containers row with colors below - scrollable on small screens
                         if !containers.isEmpty {
-                            HStack(spacing: 8) {
-                                ForEach($containers.indices, id: \.self) { index in
-                                    VStack(spacing: 8) {
-                                        ContainerView(container: $containers[index])
-                                            .frame(maxWidth: .infinity)
-                                        
-                                        // Container weight control - individual for each container
-                                        Menu {
-                                            Button(action: {
-                                                containers[index].weight = .weak
-                                            }) {
-                                                Label(ContainerWeight.weak.localizedName, systemImage: containers[index].weight == .weak ? "checkmark" : "")
-                                            }
-                                            Button(action: {
-                                                containers[index].weight = .normal
-                                            }) {
-                                                Label(ContainerWeight.normal.localizedName, systemImage: containers[index].weight == .normal ? "checkmark" : "")
-                                            }
-                                            Button(action: {
-                                                containers[index].weight = .strong
-                                            }) {
-                                                Label(ContainerWeight.strong.localizedName, systemImage: containers[index].weight == .strong ? "checkmark" : "")
-                                            }
-                                        } label: {
-                                            Text(containers[index].weight.localizedName)
-                                                .font(.system(size: 10, weight: .medium))
-                                                .foregroundColor(.white.opacity(0.8))
-                                                .padding(.horizontal, 8)
-                                                .padding(.vertical, 4)
-                                                .background(
-                                                    Capsule()
-                                                        .fill(Color(hex: "#6C5CE7").opacity(0.3))
-                                                )
-                                        }
-                                        
-                                        // Color from palette displayed below container
-                                        // Always reserve space, even if empty
-                                        VStack(spacing: 4) {
-                                            if index < currentPalette.count {
-                                                Circle()
-                                                    .fill(currentPalette[index].color)
-                                                    .frame(width: 50, height: 50)
-                                                    .overlay(
-                                                        Circle()
-                                                            .stroke(Color.white.opacity(0.2), lineWidth: 1.5)
-                                                    )
-                                                    .shadow(color: currentPalette[index].color.opacity(0.5), radius: 6, x: 0, y: 3)
-                                                
-                                                Text(currentPalette[index].hex)
-                                                    .font(.system(size: 10, weight: .medium))
-                                                    .foregroundColor(.white.opacity(0.9))
-                                                
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 12) {
+                                    ForEach($containers.indices, id: \.self) { index in
+                                        VStack(spacing: 6) {
+                                            ContainerView(container: $containers[index])
+                                                .frame(width: 80)
+                                            
+                                            // Container weight control - individual for each container
+                                            Menu {
                                                 Button(action: {
-                                                    paletteManager.addFavoriteColor(currentPalette[index])
+                                                    containers[index].weight = .weak
                                                 }) {
-                                                    Image(systemName: "heart.fill")
-                                                        .font(.system(size: 12))
-                                                        .foregroundColor(.white.opacity(0.8))
+                                                    Label(ContainerWeight.weak.localizedName, systemImage: containers[index].weight == .weak ? "checkmark" : "")
                                                 }
-                                            } else {
-                                                // Empty placeholder to maintain layout
-                                                Circle()
-                                                    .fill(Color.clear)
-                                                    .frame(width: 50, height: 50)
-                                                
-                                                Text("")
-                                                    .font(.system(size: 10, weight: .medium))
-                                                    .frame(height: 14)
-                                                
-                                                Color.clear
-                                                    .frame(width: 12, height: 12)
+                                                Button(action: {
+                                                    containers[index].weight = .normal
+                                                }) {
+                                                    Label(ContainerWeight.normal.localizedName, systemImage: containers[index].weight == .normal ? "checkmark" : "")
+                                                }
+                                                Button(action: {
+                                                    containers[index].weight = .strong
+                                                }) {
+                                                    Label(ContainerWeight.strong.localizedName, systemImage: containers[index].weight == .strong ? "checkmark" : "")
+                                                }
+                                            } label: {
+                                                Text(containers[index].weight.localizedName)
+                                                    .font(.system(size: 9, weight: .medium))
+                                                    .foregroundColor(.white.opacity(0.8))
+                                                    .padding(.horizontal, 6)
+                                                    .padding(.vertical, 3)
+                                                    .background(
+                                                        Capsule()
+                                                            .fill(Color(hex: "#6C5CE7").opacity(0.3))
+                                                    )
                                             }
+                                            
+                                            // Color from palette displayed below container
+                                            // Always reserve space, even if empty
+                                            VStack(spacing: 3) {
+                                                if index < currentPalette.count {
+                                                    Circle()
+                                                        .fill(currentPalette[index].color)
+                                                        .frame(width: 44, height: 44)
+                                                        .overlay(
+                                                            Circle()
+                                                                .stroke(Color.white.opacity(0.2), lineWidth: 1.5)
+                                                        )
+                                                        .shadow(color: currentPalette[index].color.opacity(0.5), radius: 4, x: 0, y: 2)
+                                                    
+                                                    Text(currentPalette[index].hex)
+                                                        .font(.system(size: 8, weight: .medium))
+                                                        .foregroundColor(.white.opacity(0.9))
+                                                        .lineLimit(1)
+                                                        .minimumScaleFactor(0.8)
+                                                    
+                                                    Button(action: {
+                                                        paletteManager.addFavoriteColor(currentPalette[index])
+                                                    }) {
+                                                        Image(systemName: "heart.fill")
+                                                            .font(.system(size: 10))
+                                                            .foregroundColor(.white.opacity(0.8))
+                                                    }
+                                                } else {
+                                                    // Empty placeholder to maintain layout
+                                                    Circle()
+                                                        .fill(Color.clear)
+                                                        .frame(width: 44, height: 44)
+                                                    
+                                                    Text("")
+                                                        .font(.system(size: 8, weight: .medium))
+                                                        .frame(height: 12)
+                                                    
+                                                    Color.clear
+                                                        .frame(width: 10, height: 10)
+                                                }
+                                            }
+                                            .padding(.top, 2)
+                                            .frame(height: 75) // Fixed height to maintain layout
                                         }
-                                        .padding(.top, 4)
-                                        .frame(height: 80) // Fixed height to maintain layout
+                                        .frame(width: 80)
                                     }
-                                    .frame(maxWidth: .infinity)
                                 }
+                                .padding(.horizontal, 20)
                             }
-                            .padding(.horizontal, 20)
                         }
                         
                         // Color Temperature Slider
                         if !currentPalette.isEmpty {
                             VStack(spacing: 8) {
                                 HStack {
-                                    Text("Temperature")
+                                    Text(NSLocalizedString("Temperature", comment: ""))
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(.white.opacity(0.8))
                                     Spacer()
@@ -287,7 +291,7 @@ struct HomeView: View {
                                         temperatureShift = 0.0
                                         applyTemperatureShift()
                                     }) {
-                                        Text("Reset")
+                                        Text(NSLocalizedString("Reset", comment: ""))
                                             .font(.system(size: 12))
                                             .foregroundColor(.white.opacity(0.6))
                                     }
@@ -313,78 +317,80 @@ struct HomeView: View {
                             .padding(.vertical, 8)
                         }
                         
-                        // Action buttons - improved design
+                        // Action buttons - scrollable on small screens
                         if !currentPalette.isEmpty {
-                            HStack(spacing: 12) {
-                                Menu {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 10) {
+                                    Menu {
+                                        Button(action: {
+                                            shuffleMode = .random
+                                            shufflePalette()
+                                        }) {
+                                            Label(NSLocalizedString("shuffle_random", comment: ""), systemImage: shuffleMode == .random ? "checkmark" : "")
+                                        }
+                                        Button(action: {
+                                            shuffleMode = .lightToDark
+                                            shufflePalette()
+                                        }) {
+                                            Label(NSLocalizedString("Light → Dark", comment: ""), systemImage: shuffleMode == .lightToDark ? "checkmark" : "")
+                                        }
+                                        Button(action: {
+                                            shuffleMode = .darkToLight
+                                            shufflePalette()
+                                        }) {
+                                            Label(NSLocalizedString("Dark → Light", comment: ""), systemImage: shuffleMode == .darkToLight ? "checkmark" : "")
+                                        }
+                                    } label: {
+                                        HStack(spacing: 5) {
+                                            Image(systemName: "shuffle")
+                                                .font(.system(size: 13, weight: .semibold))
+                                            Text(NSLocalizedString("shuffle", comment: ""))
+                                                .font(.system(size: 13, weight: .semibold))
+                                        }
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 14)
+                                        .padding(.vertical, 11)
+                                        .background(Color(hex: "#6C5CE7"))
+                                        .cornerRadius(12)
+                                        .shadow(color: Color(hex: "#6C5CE7").opacity(0.4), radius: 6, x: 0, y: 3)
+                                    }
+                                    
                                     Button(action: {
-                                        shuffleMode = .random
-                                        shufflePalette()
+                                        showHarmonyView = true
                                     }) {
-                                        Label("Random", systemImage: shuffleMode == .random ? "checkmark" : "")
+                                        HStack(spacing: 5) {
+                                            Image(systemName: "sparkles")
+                                                .font(.system(size: 13, weight: .semibold))
+                                            Text(NSLocalizedString("harmony", comment: ""))
+                                                .font(.system(size: 13, weight: .semibold))
+                                        }
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 14)
+                                        .padding(.vertical, 11)
+                                        .background(Color(hex: "#45B7D1"))
+                                        .cornerRadius(12)
+                                        .shadow(color: Color(hex: "#45B7D1").opacity(0.4), radius: 6, x: 0, y: 3)
                                     }
+                                    
                                     Button(action: {
-                                        shuffleMode = .lightToDark
-                                        shufflePalette()
+                                        savePalette()
                                     }) {
-                                        Label("Light → Dark", systemImage: shuffleMode == .lightToDark ? "checkmark" : "")
+                                        HStack(spacing: 5) {
+                                            Image(systemName: "checkmark.circle.fill")
+                                                .font(.system(size: 13, weight: .semibold))
+                                            Text(NSLocalizedString("save", comment: ""))
+                                                .font(.system(size: 13, weight: .semibold))
+                                        }
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 14)
+                                        .padding(.vertical, 11)
+                                        .background(Color(hex: "#50EBB7"))
+                                        .cornerRadius(12)
+                                        .shadow(color: Color(hex: "#50EBB7").opacity(0.4), radius: 6, x: 0, y: 3)
                                     }
-                                    Button(action: {
-                                        shuffleMode = .darkToLight
-                                        shufflePalette()
-                                    }) {
-                                        Label("Dark → Light", systemImage: shuffleMode == .darkToLight ? "checkmark" : "")
-                                    }
-                                } label: {
-                                    HStack(spacing: 6) {
-                                        Image(systemName: "shuffle")
-                                            .font(.system(size: 14, weight: .semibold))
-                                        Text(NSLocalizedString("shuffle", comment: ""))
-                                            .font(.system(size: 14, weight: .semibold))
-                                    }
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 18)
-                                    .padding(.vertical, 12)
-                                    .background(Color(hex: "#6C5CE7"))
-                                    .cornerRadius(14)
-                                    .shadow(color: Color(hex: "#6C5CE7").opacity(0.4), radius: 8, x: 0, y: 4)
                                 }
-                                
-                                Button(action: {
-                                    showHarmonyView = true
-                                }) {
-                                    HStack(spacing: 6) {
-                                        Image(systemName: "sparkles")
-                                            .font(.system(size: 14, weight: .semibold))
-                                        Text(NSLocalizedString("harmony", comment: ""))
-                                            .font(.system(size: 14, weight: .semibold))
-                                    }
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 18)
-                                    .padding(.vertical, 12)
-                                    .background(Color(hex: "#45B7D1"))
-                                    .cornerRadius(14)
-                                    .shadow(color: Color(hex: "#45B7D1").opacity(0.4), radius: 8, x: 0, y: 4)
-                                }
-                                
-                                Button(action: {
-                                    savePalette()
-                                }) {
-                                    HStack(spacing: 6) {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .font(.system(size: 14, weight: .semibold))
-                                        Text(NSLocalizedString("save", comment: ""))
-                                            .font(.system(size: 14, weight: .semibold))
-                                    }
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 18)
-                                    .padding(.vertical, 12)
-                                    .background(Color(hex: "#50EBB7"))
-                                    .cornerRadius(14)
-                                    .shadow(color: Color(hex: "#50EBB7").opacity(0.4), radius: 8, x: 0, y: 4)
-                                }
+                                .padding(.horizontal, 20)
                             }
-                            .padding(.horizontal, 20)
                         }
                         
                         // Drop Colors button - improved design

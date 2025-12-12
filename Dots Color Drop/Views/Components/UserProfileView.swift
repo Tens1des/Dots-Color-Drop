@@ -43,7 +43,7 @@ struct UserProfileView: View {
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(.white)
                 
-                Text("Welcome back!")
+                Text(NSLocalizedString("Welcome back!", comment: ""))
                     .font(.system(size: 12))
                     .foregroundColor(.white.opacity(0.6))
             }
@@ -58,6 +58,7 @@ struct UserProfileView: View {
         .padding()
         .background(Color.black)
 }
+
 
 
 

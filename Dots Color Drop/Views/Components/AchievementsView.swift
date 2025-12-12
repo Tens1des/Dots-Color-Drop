@@ -37,11 +37,11 @@ struct AchievementsView: View {
                     .padding(20)
                 }
             }
-            .navigationTitle("Achievements")
+            .navigationTitle(NSLocalizedString("Achievements", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(NSLocalizedString("Done", comment: "")) {
                         dismiss()
                     }
                     .foregroundColor(.white)
@@ -92,6 +92,7 @@ struct AchievementCardView: View {
     AchievementsView()
         .environmentObject(AchievementManager())
 }
+
 
 
 

@@ -86,7 +86,7 @@ struct CustomColorPickerView: View {
                     Button(action: {
                         dismiss()
                     }) {
-                        Text("Done")
+                        Text(NSLocalizedString("Done", comment: ""))
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -102,7 +102,7 @@ struct CustomColorPickerView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(NSLocalizedString("Done", comment: "")) {
                         dismiss()
                     }
                     .foregroundColor(.white)
@@ -133,7 +133,7 @@ struct ColorPickerSheet: View {
                     onSelect(selectedColor)
                     dismiss()
                 }) {
-                    Text("Add")
+                    Text(NSLocalizedString("Add", comment: ""))
                         .font(.headline)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -153,6 +153,7 @@ struct ColorPickerSheet: View {
     CustomColorPickerView(customColors: .constant([]))
         .environmentObject(SettingsManager())
 }
+
 
 
 

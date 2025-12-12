@@ -81,9 +81,9 @@ enum ShuffleMode: String, CaseIterable {
     
     var localizedName: String {
         switch self {
-        case .random: return NSLocalizedString("random", comment: "")
-        case .lightToDark: return "Light → Dark"
-        case .darkToLight: return "Dark → Light"
+        case .random: return NSLocalizedString("shuffle_random", comment: "")
+        case .lightToDark: return NSLocalizedString("Light → Dark", comment: "")
+        case .darkToLight: return NSLocalizedString("Dark → Light", comment: "")
         }
     }
 }

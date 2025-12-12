@@ -100,11 +100,11 @@ struct HistoryView: View {
                             .font(.system(size: 60))
                             .foregroundColor(.white.opacity(0.5))
                         
-                        Text("No palettes yet")
+                        Text(NSLocalizedString("No palettes yet", comment: ""))
                             .font(.title2)
                             .foregroundColor(.white.opacity(0.8))
                         
-                        Text("Create your first palette")
+                        Text(NSLocalizedString("Create your first palette", comment: ""))
                             .font(.subheadline)
                             .foregroundColor(.white.opacity(0.6))
                     }

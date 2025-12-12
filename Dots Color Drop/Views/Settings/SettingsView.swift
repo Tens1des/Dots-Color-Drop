@@ -151,7 +151,7 @@ struct SettingsView: View {
                         // Gravity Style section
                         SettingsCard {
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("Gravity Style")
+                                Text(NSLocalizedString("Gravity Style", comment: ""))
                                     .font(.headline)
                                     .foregroundColor(.white)
                                 
@@ -183,7 +183,7 @@ struct SettingsView: View {
                                     .foregroundColor(.white)
                                 
                                 if customColors.isEmpty {
-                                    Text("No custom colors")
+                                    Text(NSLocalizedString("No custom colors", comment: ""))
                                         .font(.subheadline)
                                         .foregroundColor(.white.opacity(0.6))
                                 } else {
@@ -232,7 +232,7 @@ struct SettingsView: View {
                         Button(action: {
                             showAchievements = true
                         }) {
-                            Text("Achievements")
+                            Text(NSLocalizedString("Achievements", comment: ""))
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
@@ -249,7 +249,7 @@ struct SettingsView: View {
                             HStack(spacing: 8) {
                                 Image(systemName: "book.fill")
                                     .font(.system(size: 16))
-                                Text("Show Onboarding")
+                                Text(NSLocalizedString("Show Onboarding", comment: ""))
                                     .font(.headline)
                             }
                             .foregroundColor(.white)
