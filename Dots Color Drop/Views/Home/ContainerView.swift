@@ -28,7 +28,7 @@ struct ContainerView: View {
                     )
             }
             
-            // Container shape
+            // Container shape with balls inside
             ZStack(alignment: .bottom) {
                 // Container outline
                 RoundedRectangle(cornerRadius: 8)
@@ -39,19 +39,21 @@ struct ContainerView: View {
                     .frame(height: 100)
                 
                 // Colors displayed as balls at the bottom of container
-                HStack(spacing: 6) {
-                    ForEach(container.colors.prefix(3)) { color in
-                        Circle()
-                            .fill(color.color)
-                            .frame(width: 40, height: 40)
-                            .overlay(
-                                Circle()
-                                    .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                            )
-                            .shadow(color: color.color.opacity(0.5), radius: 4, x: 0, y: 2)
+                if !container.colors.isEmpty {
+                    HStack(spacing: 6) {
+                        ForEach(container.colors.prefix(5)) { color in
+                            Circle()
+                                .fill(color.color)
+                                .frame(width: 32, height: 32)
+                                .overlay(
+                                    Circle()
+                                        .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                )
+                                .shadow(color: color.color.opacity(0.4), radius: 3, x: 0, y: 2)
+                        }
                     }
+                    .padding(.bottom, 8)
                 }
-                .padding(.bottom, 8)
             }
             .frame(height: 100)
         }

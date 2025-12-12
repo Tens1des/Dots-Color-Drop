@@ -191,33 +191,33 @@ struct HomeView: View {
                         }
                         .padding(.horizontal, 20)
                         
-                        // Containers row
+                        // Containers row with colors below
                         if !containers.isEmpty {
                             HStack(spacing: 8) {
-                                ForEach($containers) { $container in
+                                ForEach($containers.indices, id: \.self) { index in
                                     VStack(spacing: 8) {
-                                        ContainerView(container: $container)
+                                        ContainerView(container: $containers[index])
                                             .frame(maxWidth: .infinity)
                                         
                                         // Container weight control - individual for each container
                                         Menu {
                                             Button(action: {
-                                                container.weight = .weak
+                                                containers[index].weight = .weak
                                             }) {
-                                                Label(ContainerWeight.weak.localizedName, systemImage: container.weight == .weak ? "checkmark" : "")
+                                                Label(ContainerWeight.weak.localizedName, systemImage: containers[index].weight == .weak ? "checkmark" : "")
                                             }
                                             Button(action: {
-                                                container.weight = .normal
+                                                containers[index].weight = .normal
                                             }) {
-                                                Label(ContainerWeight.normal.localizedName, systemImage: container.weight == .normal ? "checkmark" : "")
+                                                Label(ContainerWeight.normal.localizedName, systemImage: containers[index].weight == .normal ? "checkmark" : "")
                                             }
                                             Button(action: {
-                                                container.weight = .strong
+                                                containers[index].weight = .strong
                                             }) {
-                                                Label(ContainerWeight.strong.localizedName, systemImage: container.weight == .strong ? "checkmark" : "")
+                                                Label(ContainerWeight.strong.localizedName, systemImage: containers[index].weight == .strong ? "checkmark" : "")
                                             }
                                         } label: {
-                                            Text(container.weight.localizedName)
+                                            Text(containers[index].weight.localizedName)
                                                 .font(.system(size: 10, weight: .medium))
                                                 .foregroundColor(.white.opacity(0.8))
                                                 .padding(.horizontal, 8)
@@ -227,6 +227,47 @@ struct HomeView: View {
                                                         .fill(Color(hex: "#6C5CE7").opacity(0.3))
                                                 )
                                         }
+                                        
+                                        // Color from palette displayed below container
+                                        // Always reserve space, even if empty
+                                        VStack(spacing: 4) {
+                                            if index < currentPalette.count {
+                                                Circle()
+                                                    .fill(currentPalette[index].color)
+                                                    .frame(width: 50, height: 50)
+                                                    .overlay(
+                                                        Circle()
+                                                            .stroke(Color.white.opacity(0.2), lineWidth: 1.5)
+                                                    )
+                                                    .shadow(color: currentPalette[index].color.opacity(0.5), radius: 6, x: 0, y: 3)
+                                                
+                                                Text(currentPalette[index].hex)
+                                                    .font(.system(size: 10, weight: .medium))
+                                                    .foregroundColor(.white.opacity(0.9))
+                                                
+                                                Button(action: {
+                                                    paletteManager.addFavoriteColor(currentPalette[index])
+                                                }) {
+                                                    Image(systemName: "heart.fill")
+                                                        .font(.system(size: 12))
+                                                        .foregroundColor(.white.opacity(0.8))
+                                                }
+                                            } else {
+                                                // Empty placeholder to maintain layout
+                                                Circle()
+                                                    .fill(Color.clear)
+                                                    .frame(width: 50, height: 50)
+                                                
+                                                Text("")
+                                                    .font(.system(size: 10, weight: .medium))
+                                                    .frame(height: 14)
+                                                
+                                                Color.clear
+                                                    .frame(width: 12, height: 12)
+                                            }
+                                        }
+                                        .padding(.top, 4)
+                                        .frame(height: 80) // Fixed height to maintain layout
                                     }
                                     .frame(maxWidth: .infinity)
                                 }
@@ -272,39 +313,8 @@ struct HomeView: View {
                             .padding(.vertical, 8)
                         }
                         
-                        // Result palette
+                        // Action buttons - improved design
                         if !currentPalette.isEmpty {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 12) {
-                            ForEach(currentPalette) { color in
-                                VStack(spacing: 6) {
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(color.color)
-                                        .frame(width: 70, height: 70)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 12)
-                                                .stroke(Color.white.opacity(0.2), lineWidth: 1.5)
-                                        )
-                                        .shadow(color: color.color.opacity(0.3), radius: 8, x: 0, y: 4)
-                                    
-                                    Text(color.hex)
-                                        .font(.system(size: 11, weight: .medium))
-                                        .foregroundColor(.white.opacity(0.9))
-                                    
-                                    Button(action: {
-                                        paletteManager.addFavoriteColor(color)
-                                    }) {
-                                        Image(systemName: "heart.fill")
-                                            .font(.system(size: 14))
-                                            .foregroundColor(.white.opacity(0.8))
-                                    }
-                                }
-                            }
-                                }
-                                .padding(.horizontal, 20)
-                            }
-                            
-                            // Action buttons - improved design
                             HStack(spacing: 12) {
                                 Menu {
                                     Button(action: {
@@ -477,6 +487,7 @@ struct HomeView: View {
             let duration = settingsManager.settings.gravityStyle == .fast ? 1.5 : settingsManager.settings.gravityStyle == .bouncy ? 2.5 : 2.0
             DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                 // Simple distribution for non-physics mode
+                // Keep all original colors for display in containers
                 for (index, color) in colors.enumerated() {
                     let containerIndex = index % containers.count
                     if !containers[containerIndex].isLocked {
@@ -484,16 +495,12 @@ struct HomeView: View {
                     }
                 }
                 
-                // Mix colors in each container and build palette
-                for i in 0..<containers.count {
-                    if !containers[i].colors.isEmpty, let mixedColor = ColorGenerator.shared.mixColors(containers[i].colors) {
-                        containers[i].colors = [mixedColor]
-                    }
-                }
-                
-                // Build palette from containers - get mixed color from each container
+                // Build palette from containers - mix colors from each container
                 currentPalette = containers.compactMap { container in
-                    ColorGenerator.shared.mixColors(container.colors)
+                    if !container.colors.isEmpty {
+                        return ColorGenerator.shared.mixColors(container.colors)
+                    }
+                    return nil
                 }
                 
                 // Automatically save to history
@@ -509,16 +516,11 @@ struct HomeView: View {
     }
     
     private func handleBallReachedBottom(ball: Ball, containerIndex: Int) {
-        // Add color to container and mix with existing colors, but skip if container is locked
+        // Add color to container, but skip if container is locked
+        // Keep all original colors for display in container
         if containerIndex < containers.count {
             if !containers[containerIndex].isLocked {
                 containers[containerIndex].colors.append(ball.color)
-                
-                // Mix all colors in the container
-                if let mixedColor = ColorGenerator.shared.mixColors(containers[containerIndex].colors) {
-                    // Keep only the mixed color
-                    containers[containerIndex].colors = [mixedColor]
-                }
             }
         }
         
@@ -526,9 +528,12 @@ struct HomeView: View {
         
         // Check if all balls have reached bottom
         if ballsProcessed >= totalBalls {
-                // Build palette from containers - get mixed color from each container
+                // Build palette from containers - mix colors from each container
                 currentPalette = containers.compactMap { container in
-                    ColorGenerator.shared.mixColors(container.colors)
+                    if !container.colors.isEmpty {
+                        return ColorGenerator.shared.mixColors(container.colors)
+                    }
+                    return nil
                 }
                 
                 // Save original palette for temperature shift
